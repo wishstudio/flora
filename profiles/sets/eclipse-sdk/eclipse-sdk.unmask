@@ -1,10 +1,10 @@
 ##############################################################
-## Mask for eclipse-sdk
+## Unmask for eclipse-sdk
 ##############################################################
 #
 # Eclipse is very out-of-date in Gentoo as newer versions 
 # depend on packages that are waiting to hit Portage. Some of
-# the packages masked below are not ready yet (not "clean"
+# the packages unmasked below are not ready yet (not "clean"
 # enough to hit Portage), but here we provide a simple way for
 # Funtoo users to test them out and report problems if there
 # are any.
