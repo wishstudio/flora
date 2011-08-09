@@ -2,23 +2,20 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=3
-inherit toolchain-funcs mercurial
-
-: ${EHG_REPO_URI:="http://hg.suckless.org/${PN}"}
+inherit multilib toolchain-funcs
 
 DESCRIPTION="A stand-alone client/server 9P library including ixpc client"
 HOMEPAGE="http://libs.suckless.org/libixp"
-SRC_URI=""
+SRC_URI="https://github.com/downloads/tarsius/flora/${P}.tar.bz2"
+# hg archive 
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~hppa ~ppc ~ppc64 ~x86"
 IUSE=""
 
 RDEPEND=""
 DEPEND="app-arch/xz-utils"
-
-S="${WORKDIR}/${PN}"
 
 pkg_setup() {
 	myixpconf=(
