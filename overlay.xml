@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layman>
+  <overlay contact="https://github.com/funtoo/flora" name="flora" src="https://github.com/funtoo/flora" status="unofficial" type="git">
+    <link>http://github.com/funtoo/flora</link>
+    <description>Funtoo Linux Community Overlay</description>
+  </overlay>
+</layman>
