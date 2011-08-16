@@ -59,7 +59,7 @@ src_prepare() {
 
 	if use python || use plan9 || use ruby
 	then
-		use python || { sed -i -e "/^DIRS =	python/s|python||" $alt || die; }
+		use python || { sed -i -e "/^DIRS = python/s|python||" $alt || die; }
 		use plan9  || { sed -i -e "/^\tplan9port/d"            $alt || die; }
 		use ruby   || { sed -i -e "/^\truby/d"                 $alt || die; }
 	else

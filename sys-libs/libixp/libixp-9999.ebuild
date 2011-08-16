@@ -1,13 +1,12 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="3"
-
+EAPI=3
 inherit toolchain-funcs mercurial
 
 : ${EHG_REPO_URI:="http://hg.suckless.org/${PN}"}
 
-DESCRIPTION="Standalone client/server 9P library"
+DESCRIPTION="A stand-alone client/server 9P library including ixpc client"
 HOMEPAGE="http://libs.suckless.org/libixp"
 SRC_URI=""
 
@@ -17,22 +16,28 @@ KEYWORDS=""
 IUSE=""
 
 RDEPEND=""
+DEPEND="app-arch/xz-utils"
 
 S="${WORKDIR}/${PN}"
 
-src_prepare() {
-	sed -i \
-		-e "/^ *PREFIX/s|=.*|= /usr|" \
-		-e "/^ *ETC/s|=.*|= /etc|" \
-		-e "/^ *CFLAGS/s|=|+=|" \
-		-e "/^ *LDFLAGS/s|=|+=|" \
-		"${S}"/config.mk || die "sed failed"
+pkg_setup() {
+	myixpconf=(
+		PREFIX="/usr"
+		LIBDIR="/usr/$(get_libdir)"
+		CC="$(tc-getCC) -c"
+		LD="$(tc-getCC) ${LDFLAGS}"
+		AR="$(tc-getAR) crs"
+		MAKESO="1"
+		SOLDFLAGS="-shared -Wl,-soname"
+		)
 }
 
 src_compile() {
-	emake || die "emake failed"
+	emake "${myixpconf[@]}" || die "emake failed"
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	emake "${myixpconf[@]}" DESTDIR="${D}" install || die "emake install failed"
+	dolib.so lib/libixp{,_pthread}.so || die "dolib.so failed"
+	dodoc NEWS
 }
