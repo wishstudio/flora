@@ -1,0 +1,5 @@
+# I do not consider git ebuilds stable enough to be unmasked.
+
+# Mask for FriBID git version
+=www-plugins/fribid-9999
+
