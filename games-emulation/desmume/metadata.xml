@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer>
+		<email>ipalaus@ipalaus.es</email>
+		<name>Isern Palaus</name>
+	</maintainer>
+	<longdescription lang="en">
+		DeSmuME is a Nintendo DS emulator.
+	</longdescription>
+</pkgmetadata>
