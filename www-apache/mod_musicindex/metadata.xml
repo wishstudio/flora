@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<herd>apache</herd>
+	<maintainer>
+		<email>ipalaus@ipalaus.es</email>
+		<name>Isern Palaus</name>
+	</maintainer>
+	<longdescription>
+		mod_musicindex is an Apache module initially aimed at being a C implementation of the Perl module Apache::MP3. It allows nice displaying of directories containing MP3, FLAC, Ogg Vorbis or MP4/AAC files, including sorting them on various fields, streaming and/or downloading them, constructing playlists and searching them.
+	</longdescription>
+</pkgmetadata>
