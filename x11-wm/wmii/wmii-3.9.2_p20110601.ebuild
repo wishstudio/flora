@@ -7,7 +7,7 @@ inherit flag-o-matic multilib toolchain-funcs
 
 DESCRIPTION="A dynamic window manager for X11"
 HOMEPAGE="http://${PN}.suckless.org"
-SRC_URI="https://github.com/downloads/tarsius/tarsius-overlay/${P}.tar.bz2"
+SRC_URI="https://github.com/downloads/tarsius/flora/${P}.tar.bz2"
 
 LICENSE="MIT"
 SLOT="0"
@@ -56,7 +56,7 @@ src_prepare() {
 
 	if use python || use plan9 || use ruby
 	then
-		use python || { sed -i -e "/^DIRS =	python/s|python||" $alt || die; }
+		use python || { sed -i -e "/^DIRS = python/s|python||" $alt || die; }
 		use plan9  || { sed -i -e "/^\tplan9port/d"            $alt || die; }
 		use ruby   || { sed -i -e "/^\truby/d"                 $alt || die; }
 	else
