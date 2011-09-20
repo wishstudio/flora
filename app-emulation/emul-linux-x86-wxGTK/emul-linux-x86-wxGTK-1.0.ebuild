@@ -7,7 +7,7 @@ EAPI=4
 inherit emul-linux-x86
 
 BASE_PV="2.8"
-SRC_URI="${P}.tar.xz"
+SRC_URI="http://github.com/downloads/wishstudio/flora/${P}.tar.xz"
 
 LICENSE="wxWinLL-3 GPL-2"
 SLOT="0"
