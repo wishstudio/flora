@@ -3,8 +3,8 @@
 <pkgmetadata>
   <herd>desktop-wm</herd>
   <maintainer>
-    <email>staff@funtoo.org</email>
-    <name>Funtoo Core Team</name>
+    <email>jonas@bernoul.li</email>
+    <name>Jonas Bernoulli</name>
   </maintainer>
   <longdescription lang="en">
     Standalone client/server 9P library.  libixp’s server API is based

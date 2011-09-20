@@ -154,9 +154,7 @@ src_unpack() {
 
 	#unpack "eclipse-build-${ECLIPSE_BUILD_VER}.tar.xz"
 	tar -xpJf "${DISTDIR}/eclipse-build-${ECLIPSE_BUILD_VER}.tar.xz"
-
 	ln -s "${DISTDIR}/eclipse-${BUILD_VER}-src.tar.bz2" "${S}/eclipse-${BUILD_LABEL}-src.tar.bz2" || die
-
 	cd "${S}"
 	# building with ecj fails for some reason (polluted classpath probably)
 	java-pkg_force-compiler javac
@@ -164,10 +162,10 @@ src_unpack() {
 	#		-e 's/^buildId=.*$/buildId='"${BUILD_ID}"'/' \
 	#		-i build.properties -i pdebuild.properties || die
 	eant unpack
-
 	cp -r "${S}/build/eclipse-${PV}-src/"* "${buildDir}/" || die "Copying sources failed"
 	rm -r "${S}/build/eclipse-${PV}-src" || die "Removing dir failed"
 	ln -s "eclipse-${BUILD_LABEL}-src" "${S}/build/eclipse-${PV}-src" || die "Creating link failed"
+
 }
 
 src_prepare() {
@@ -239,6 +237,7 @@ src_prepare() {
 }
 
 src_compile() {
+	addpredict "/dev/random"
 	ANT_OPTS='-Xmx512M' eant -DbuildArch="${arch}"
 
 	# remove stray symlink

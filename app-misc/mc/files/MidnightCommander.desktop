@@ -1,0 +1,10 @@
+
+[Desktop Entry]
+Name=Midnight Commander
+Type=Application
+Comment=A visual file manager
+Exec=mc
+Terminal=true
+Icon=MidnightCommander
+Categories=GNOME;GTK;Utility;Core;
+
