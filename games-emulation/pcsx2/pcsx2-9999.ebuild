@@ -4,6 +4,13 @@
 
 EAPI=3
 
+WX_GTK_VER="2.8"
+
+# no need for amd64 as we will use precompiled wxGTK.
+if use x86; then
+	inherit wxwidgets
+fi
+
 inherit games cmake-utils subversion
 
 DESCRIPTION="A PlayStation 2 emulator"
@@ -13,7 +20,7 @@ ESVN_PROJECT="pcsx2"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~x86 ~amd64"
 IUSE="debug"
 if use amd64; then
 	ABI="x86"
@@ -25,19 +32,42 @@ else
 fi
 
 DEPEND="dev-cpp/sparsehash
+	x86? (
+		app-arch/bzip2
+		sys-libs/zlib
+		media-libs/alsa-lib
+		media-libs/glew
+		media-libs/libsdl
+		media-libs/portaudio
+		media-gfx/nvidia-cg-toolkit
+		virtual/jpeg
+		virtual/opengl
+		x11-libs/gtk+:2
+		x11-libs/libICE
+		x11-libs/libX11
+		x11-libs/libXext
+		x11-libs/wxGTK[X]
+	)
 	amd64? ( media-gfx/nvidia-cg-toolkit[multilib]
 		app-emulation/emul-linux-x86-baselibs
 		app-emulation/emul-linux-x86-opengl
 		app-emulation/emul-linux-x86-xlibs
 		app-emulation/emul-linux-x86-gtklibs
+		app-emulation/emul-linux-x86-sdl
 		app-emulation/emul-linux-x86-soundlibs
-		app-emulation/emul-linux-x86-wxGTK )"
+		app-emulation/emul-linux-x86-wxGTK
+	)"
 RDEPEND="${DEPEND}"
 
 src_configure() {
-	# tell cmake to use 32 bit library
+	wxgtk_config=""
+	cg_config=""
 	if use amd64; then
+		# tell cmake to use 32 bit library
 		mylibpath="/usr/lib32"
+		wxgtk_config="-DwxWidgets_CONFIG_EXECUTABLE=/usr/bin/wx-config-32"
+		cg_config="-DCG_LIBRARY=/opt/nvidia-cg-toolkit/lib32/libCg.so
+					-DCG_GL_LIBRARY=/opt/nvidia-cg-toolkit/lib32/libCgGL.so"
 	else
 		mylibpath="/usr/lib"
 	fi
@@ -46,9 +76,8 @@ src_configure() {
 		-DPACKAGE_MODE=1
 		-DCMAKE_INSTALL_PREFIX=/usr
 		-DCMAKE_LIBRARY_PATH=${mylibpath}
-		-DwxWidgets_CONFIG_EXECUTABLE=/usr/bin/wx-config-32
-		-DCG_LIBRARY=/opt/nvidia-cg-toolkit/lib32/libCg.so
-		-DCG_GL_LIBRARY=/opt/nvidia-cg-toolkit/lib32/libCgGL.so
+		${wxgtk_config}
+		${cg_config}
 		"
 	cmake-utils_src_configure
 }
