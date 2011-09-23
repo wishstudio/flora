@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=3
 
 inherit kde4-base
 
@@ -12,7 +12,7 @@ SRC_URI="mirror://sourceforge/kqrcode/${P}.tar.gz"
 
 LICENSE="GPL"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~x86 ~amd64"
 IUSE="+plugins"
 
 DEPEND="media-gfx/qrencode
