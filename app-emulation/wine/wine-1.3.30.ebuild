@@ -20,7 +20,7 @@ else
 	S=${WORKDIR}/${MY_P}
 fi
 
-GV="1.2.0"
+GV="1.3"
 DESCRIPTION="free implementation of Windows(tm) on Unix"
 HOMEPAGE="http://www.winehq.org/"
 SRC_URI="${SRC_URI}
@@ -31,14 +31,19 @@ SRC_URI="${SRC_URI}
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="alsa capi cups custom-cflags dbus fontconfig +gecko gnutls gphoto2 gsm gstreamer hal jpeg lcms ldap mp3 ncurses nls openal opencl +opengl +oss +perl png samba scanner ssl test +threads +truetype v4l +win32 +win64 +X xcomposite xinerama xml"
+IUSE="alsa capi cups custom-cflags dbus fontconfig +gecko gnutls gphoto2 gsm gstreamer hardened jpeg lcms ldap mp3 ncurses nls openal opencl +opengl +oss +perl png samba scanner ssl test +threads +truetype v4l +win32 +win64 +X xcomposite xinerama xml"
 RESTRICT="test" #72375
 
 MLIB_DEPS="amd64? (
 	truetype? ( >=app-emulation/emul-linux-x86-xlibs-2.1 )
-	X? ( >=app-emulation/emul-linux-x86-xlibs-2.1 )
+	X? (
+		>=app-emulation/emul-linux-x86-xlibs-2.1
+		>=app-emulation/emul-linux-x86-soundlibs-2.1
+	)
+	mp3? ( app-emulation/emul-linux-x86-soundlibs )
 	openal? ( app-emulation/emul-linux-x86-sdl )
 	opengl? ( app-emulation/emul-linux-x86-opengl )
+	scanner? ( app-emulation/emul-linux-x86-medialibs )
 	v4l? ( app-emulation/emul-linux-x86-medialibs )
 	app-emulation/emul-linux-x86-baselibs
 	>=sys-kernel/linux-headers-2.6
@@ -53,7 +58,6 @@ RDEPEND="truetype? ( >=media-libs/freetype-2.0.0 media-fonts/corefonts )
 	dbus? ( sys-apps/dbus )
 	gnutls? ( net-libs/gnutls )
 	gstreamer? ( media-libs/gstreamer media-libs/gst-plugins-base )
-	hal? ( sys-apps/hal )
 	X? (
 		x11-libs/libXcursor
 		x11-libs/libXrandr
@@ -81,7 +85,7 @@ RDEPEND="truetype? ( >=media-libs/freetype-2.0.0 media-fonts/corefonts )
 	v4l? ( media-libs/libv4l )
 	!win64? ( ${MLIB_DEPS} )
 	win32? ( ${MLIB_DEPS} )
-	xcomposite? ( x11-libs/libXcomposite ) "
+	xcomposite? ( x11-libs/libXcomposite )"
 DEPEND="${RDEPEND}
 	X? (
 		x11-proto/inputproto
@@ -89,7 +93,8 @@ DEPEND="${RDEPEND}
 		x11-proto/xf86vidmodeproto
 	)
 	xinerama? ( x11-proto/xineramaproto )
-	sys-devel/bison
+	!hardened? ( sys-devel/prelink )
+	virtual/yacc
 	sys-devel/flex"
 
 src_unpack() {
@@ -106,8 +111,6 @@ src_unpack() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}pulse-0.40.patch
-
 	epatch "${FILESDIR}"/${PN}-1.1.15-winegcc.patch #260726
 	epatch_user #282735
 	sed -i '/^UPDATE_DESKTOP_DATABASE/s:=.*:=true:' tools/Makefile.in || die
@@ -132,7 +135,7 @@ do_configure() {
 		$(use_with gphoto2 gphoto) \
 		$(use_with gsm) \
 		$(use_with gstreamer) \
-		$(! use dbus && echo --without-hal || use_with hal) \
+		--without-hal \
 		$(use_with jpeg) \
 		$(use_with ldap) \
 		$(use_with mp3 mpg123) \
@@ -197,13 +200,14 @@ src_install() {
 		rm "${D}"/usr/bin/{wine{dump,maker},function_grep.pl} "${D}"/usr/share/man/man1/wine{dump,maker}.1 || die
 	fi
 
-	insinto /etc/xdg/menus/applications-merged/
-	doins  "${FILESDIR}/wine.menu" || die "doins failed"
-	insinto /usr/share/desktop-directories/
-	doins  "${FILESDIR}/Wine.directory" || die "doins failed"
-	domenu "${FILESDIR}"/*.desktop || die "domenu failed"
-	insinto /usr/share/pixmaps/
-	doins "${FILESDIR}"/*.svg || die "doins failed"
+    insinto /etc/xdg/menus/applications-merged/
+    doins  "${FILESDIR}/wine.menu" || die "doins failed"
+    insinto /usr/share/desktop-directories/
+    doins  "${FILESDIR}/Wine.directory" || die "doins failed"
+    domenu "${FILESDIR}"/*.desktop || die "domenu failed"
+    insinto /usr/share/pixmaps/
+    doins "${FILESDIR}"/*.svg || die "doins failed"
+
 }
 
 pkg_postinst() {

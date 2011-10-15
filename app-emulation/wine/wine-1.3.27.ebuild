@@ -20,7 +20,7 @@ else
 	S=${WORKDIR}/${MY_P}
 fi
 
-GV="1.2.0"
+GV="1.3"
 DESCRIPTION="free implementation of Windows(tm) on Unix"
 HOMEPAGE="http://www.winehq.org/"
 SRC_URI="${SRC_URI}
@@ -31,12 +31,15 @@ SRC_URI="${SRC_URI}
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="alsa capi cups custom-cflags dbus fontconfig +gecko gnutls gphoto2 gsm gstreamer hal jpeg lcms ldap mp3 ncurses nls openal opencl +opengl +oss +perl png samba scanner ssl test +threads +truetype v4l +win32 +win64 +X xcomposite xinerama xml"
+IUSE="alsa capi cups custom-cflags dbus fontconfig +gecko gnutls gphoto2 gsm gstreamer hal hardened jpeg lcms ldap mp3 ncurses nls openal opencl +opengl +oss +perl png samba scanner ssl test +threads +truetype v4l +win32 +win64 +X xcomposite xinerama xml"
 RESTRICT="test" #72375
 
 MLIB_DEPS="amd64? (
 	truetype? ( >=app-emulation/emul-linux-x86-xlibs-2.1 )
-	X? ( >=app-emulation/emul-linux-x86-xlibs-2.1 )
+	X? (
+		>=app-emulation/emul-linux-x86-xlibs-2.1
+		>=app-emulation/emul-linux-x86-soundlibs-2.1
+	)
 	openal? ( app-emulation/emul-linux-x86-sdl )
 	opengl? ( app-emulation/emul-linux-x86-opengl )
 	v4l? ( app-emulation/emul-linux-x86-medialibs )
@@ -81,7 +84,7 @@ RDEPEND="truetype? ( >=media-libs/freetype-2.0.0 media-fonts/corefonts )
 	v4l? ( media-libs/libv4l )
 	!win64? ( ${MLIB_DEPS} )
 	win32? ( ${MLIB_DEPS} )
-	xcomposite? ( x11-libs/libXcomposite ) "
+	xcomposite? ( x11-libs/libXcomposite )"
 DEPEND="${RDEPEND}
 	X? (
 		x11-proto/inputproto
@@ -89,7 +92,8 @@ DEPEND="${RDEPEND}
 		x11-proto/xf86vidmodeproto
 	)
 	xinerama? ( x11-proto/xineramaproto )
-	sys-devel/bison
+	!hardened? ( sys-devel/prelink )
+	virtual/yacc
 	sys-devel/flex"
 
 src_unpack() {
@@ -106,8 +110,6 @@ src_unpack() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}pulse-0.40.patch
-
 	epatch "${FILESDIR}"/${PN}-1.1.15-winegcc.patch #260726
 	epatch_user #282735
 	sed -i '/^UPDATE_DESKTOP_DATABASE/s:=.*:=true:' tools/Makefile.in || die
@@ -204,6 +206,7 @@ src_install() {
 	domenu "${FILESDIR}"/*.desktop || die "domenu failed"
 	insinto /usr/share/pixmaps/
 	doins "${FILESDIR}"/*.svg || die "doins failed"
+
 }
 
 pkg_postinst() {
