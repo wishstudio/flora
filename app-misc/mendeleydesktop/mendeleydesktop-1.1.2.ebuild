@@ -6,15 +6,21 @@ EAPI="4"
 
 inherit eutils multilib
 
-if use amd64 ; then
-	MY_P=${P}-"linux-x86_64"
-elif use x86 ; then
-	MY_P=${P}-"linux-i486"
+MY_P_AMD64="${P}-linux-x86_64"
+MY_P_X86="${P}-linux-i486"
+
+if use amd64 || use amd64-linux ; then
+	MY_P="${MY_P_AMD64}"
+elif use x86 || use x86-linux ; then
+	MY_P="${MY_P_X86}"
 fi
 
 DESCRIPTION="A free research management tool for desktop and web"
 HOMEPAGE="http://www.mendeley.com/"
-SRC_URI="https://s3.amazonaws.com/mendeley-desktop-download/linux/${MY_P}.tar.bz2?u=122622&x=${MY_P}.tar.bz2 -> ${MY_P}.tar.bz2"
+SRC_URI="amd64? ( https://s3.amazonaws.com/mendeley-desktop-download/linux/${MY_P_AMD64}.tar.bz2 -> ${MY_P_AMD64}.tar.bz2 )
+	x86? ( https://s3.amazonaws.com/mendeley-desktop-download/linux/${MY_P_X86}.tar.bz2 -> ${MY_P_X86}.tar.bz2 )
+	amd64-linux? ( https://s3.amazonaws.com/mendeley-desktop-download/linux/${MY_P_AMD64}.tar.bz2 -> ${MY_P_AMD64}.tar.bz2 )
+	x86-linux? ( https://s3.amazonaws.com/mendeley-desktop-download/linux/${MY_P_X86}.tar.bz2 -> ${MY_P_X86}.tar.bz2 )"
 
 LICENSE="Mendeley-EULA"
 SLOT="0"
@@ -33,10 +39,8 @@ RDEPEND=">=x11-libs/qt-core-4.6
 S="${WORKDIR}/${MY_P}"
 
 QA_PRESTRIPPED="
-	/opt/mendeleydesktop/$(get_libdir)/mendeleydesktop/libexec/mendeleydesktop.x86_64
-	/opt/mendeleydesktop/$(get_libdir)/mendeleydesktop/libexec/Updater
-	/opt/mendeleydesktop/$(get_libdir)/libPDFNetC.so
-	/opt/mendeleydesktop/$(get_libdir)/libMendeley.so.${PV}"
+	/opt/mendeleydesktop/$(get_libdir)/mendeleydesktop/libexec/.*
+	/opt/mendeleydesktop/$(get_libdir)/lib.*so.*"
 
 src_prepare() {
 	# remove bundled Qt libraries
