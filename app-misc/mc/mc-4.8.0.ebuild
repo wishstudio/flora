@@ -4,18 +4,18 @@
 
 EAPI=4
 
-inherit base
+inherit base flag-o-matic
 
 MY_P=${P/_/-}
 
 DESCRIPTION="GNU Midnight Commander is a text based file manager"
 HOMEPAGE="http://www.midnight-commander.org"
-SRC_URI="http://www.midnight-commander.org/downloads/${MY_P}.tar.lzma"
+SRC_URI="http://www.midnight-commander.org/downloads/${MY_P}.tar.xz"
 
-LICENSE="GPL-2"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd ~x86-interix ~amd64-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x86-solaris"
-IUSE="+edit gpm +ncurses nls samba slang X"
+IUSE="+edit gpm +ncurses nls samba slang test X"
 
 REQUIRED_USE="^^ ( ncurses slang )"
 
@@ -33,13 +33,16 @@ RDEPEND=">=dev-libs/glib-2.8:2
 DEPEND="${RDEPEND}
 	app-arch/xz-utils
 	dev-util/pkgconfig
-	nls? ( sys-devel/gettext )"
+	nls? ( sys-devel/gettext )
+	test? ( dev-libs/check )
+	"
 
 S=${WORKDIR}/${MY_P}
 
 src_configure() {
 	local myscreen=ncurses
 	use slang && myscreen=slang
+	[[ ${CHOST} == *-solaris* ]] && append-ldflags "-lnsl -lsocket"
 
 	econf \
 		--disable-dependency-tracking \
@@ -51,7 +54,8 @@ src_configure() {
 		$(use_enable samba vfs-smb) \
 		$(use_with gpm gpm-mouse) \
 		--with-screen=${myscreen} \
-		$(use_with edit)
+		$(use_with edit) \
+		$(use_enable test tests)
 }
 
 src_install() {
