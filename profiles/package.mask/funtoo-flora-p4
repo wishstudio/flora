@@ -1,0 +1,5 @@
+# Mask file for my experimental and live builds.
+
+# Liberal Crime Squad SVN sources. As of rev. 581 builds okay and appears to be
+# quite stable.
+=games-rpg/lcs-9999
