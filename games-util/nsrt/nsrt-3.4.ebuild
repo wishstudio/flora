@@ -12,7 +12,7 @@ LICENSE="NSRT"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~x86"
 IUSE=""
-RESTRICT="strip"
+RESTRICT="mirror strip"
 
 src_install() {
 	dogamesbin ipsedit nren nsrt || die "dogamesbin failed"

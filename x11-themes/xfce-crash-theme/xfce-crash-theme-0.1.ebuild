@@ -13,7 +13,7 @@ IUSE=""
 
 RDEPEND="x11-themes/gtk-engines-xfce"
 
-RESTRICT="binchecks strip"
+RESTRICT="binchecks mirror strip"
 
 src_install() {
 	insinto "/usr/share/themes"
