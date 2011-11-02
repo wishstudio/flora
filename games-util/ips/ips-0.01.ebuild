@@ -17,6 +17,7 @@ RESTRICT="mirror strip"
 RDEPEND="dev-lang/perl"
 
 src_install() {
+	sed -i "s/modified/unmodified/" ips.pl
 	dogamesbin ips.pl || die "dogamesbin failed"
 	prepgamesdirs
 }
