@@ -17,27 +17,27 @@ IUSE=""
 RESTRICT="fetch strip"
 
 RDEPEND=">=media-libs/libsdl-1.2
-	media-libs/mesa
 	media-libs/alsa-lib
-	x11-libs/libX11
-	x11-libs/libXau
-	x11-libs/libXdmcp
-	x11-libs/libxcb
-	x11-libs/libICE
-	x11-libs/libSM
-	x11-libs/libXxf86vm
+	media-libs/mesa
 	media-libs/flac
 	media-libs/libogg
 	media-libs/libsndfile
 	media-libs/libvorbis
+	x11-libs/libICE
+	x11-libs/libSM
+	x11-libs/libX11
+	x11-libs/libXau
+	x11-libs/libXdmcp
 	x11-libs/libXi
+	x11-libs/libXxf86vm
+	x11-libs/libxcb
 	>=x11-libs/libdrm-2.4
 		amd64? (
 	app-emulation/emul-linux-x86-baselibs
+	app-emulation/emul-linux-x86-opengl
 	app-emulation/emul-linux-x86-sdl
 	app-emulation/emul-linux-x86-soundlibs
-	app-emulation/emul-linux-x86-xlibs
-	app-emulation/emul-linux-x86-opengl )"
+	app-emulation/emul-linux-x86-xlibs )"
 
 S="${WORKDIR}"/"${PN}"
 dir="${GAMES_PREFIX_OPT}"/"${PN}"
@@ -58,7 +58,8 @@ src_install() {
 	exeinto "${dir}"
 	doexe vox || die "doexe failed"
 	games_make_wrapper "${PN}" "${dir}/vox" "${dir}" "${dir}"
-	make_desktop_entry "${PN}" "Voxatron" "${PN}" "Game;Adventure;" "Comment=Action-adventure game set in a destructable world made of voxels"
+	doicon "${FILESDIR}"/voxatron.png
+	make_desktop_entry "${PN}" "Voxatron" "${PN}" "Game;AdventureGame" "Comment=Action-adventure game set in a destructable world made of voxels"
 	dodoc vox.txt
 	prepgamesdirs
 }

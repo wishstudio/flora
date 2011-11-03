@@ -58,7 +58,8 @@ src_install() {
 	exeinto "${dir}"
 	doexe vox || die "doexe failed"
 	games_make_wrapper "${PN}" "${dir}/vox" "${dir}" "${dir}"
-	make_desktop_entry "${PN}" "Voxatron" "${PN}" "Game;Adventure;" "Comment=Action-adventure game set in a destructable world made of voxels"
+	doicon "${FILESDIR}"/voxatron.png
+	make_desktop_entry "${PN}" "Voxatron" "${PN}" "Game;AdventureGame" "Comment=Action-adventure game set in a destructable world made of voxels"
 	dodoc vox.txt
 	prepgamesdirs
 }
